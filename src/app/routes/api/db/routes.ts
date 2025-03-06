@@ -30,16 +30,16 @@ router.get("/create", async (req: Request, res: Response, next: NextFunction) =>
     const defaultPassword = Math.random().toString(36).substring(2);
 
     const newUser = await db.insert(user).values({
-      fullName: req.body.fullName || `User ${Math.random().toString(36).substring(2)}`,
-      username: req.body.username || randomUsername,
-      email: req.body.email || `${randomUsername}@example.com`,
-      password: req.body.password || defaultPassword,
-      avatar: req.body.avatar || null,
-      banner: req.body.banner || null,
-      bio: req.body.bio || null,
-      isActive: req.body.isActive || false,
-      isMaster: req.body.isMaster || false,
-      role: req.body.role || "STUDENT"
+      fullName: `User ${Math.random().toString(36).substring(2)}`,
+      username: randomUsername(),
+      email: `${randomUsername()}@example.com`,
+      password: defaultPassword,
+      avatar: null,
+      banner: null,
+      bio: null,
+      isActive: false,
+      isMaster: false,
+      role: "STUDENT"
     });
 
     res.json({
