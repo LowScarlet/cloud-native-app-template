@@ -1,17 +1,49 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+interface usersInterface {
+  id: number;
+  fullName: string;
+  username: string;
+  email: string;
+  password: string;
+}
+
+interface filesInterface {
+  name: string;
+  url: string;
+}
 
 export default function Home() {
   const [pingResponse, setPingResponse] = useState('Click button to test');
-  const [files, setFiles] = useState([{ id: 1, name: 'example.txt', size: '1.5kb', type: 'image' }]);
-  const [users, setUsers] = useState([{
-    id: 1,
-    fullname: 'Tegar Maulana Fahreza',
-    username: 'lowscarlet',
-    email: 'lowscarlet@gmail.com',
-    password: '12345'
-  }]);
+  const [files, setFiles] = useState<filesInterface[]>([]);
+  const [users, setUsers] = useState<usersInterface[]>([]);
+
+  const fetchFiles = async () => {
+    try {
+      const response = await fetch('https://'+process.env.NEXT_PUBLIC_BACKEND_DOMAIN+'/api/multer');
+      const data = await response.json();
+      setFiles(data);
+    } catch (error) {
+      console.error('Error fetching files:', error);
+    }
+  };
+
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch('https://'+process.env.NEXT_PUBLIC_BACKEND_DOMAIN+'/api/db');
+      const data = await response.json();
+      setUsers(data);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchFiles();
+    fetchUsers();
+  }, []);
 
   const handlePing = async () => {
     try {
@@ -30,12 +62,11 @@ export default function Home() {
       const formData = new FormData();
       formData.append('file', file);
       
-      const response = await fetch('/api/db', {
+      await fetch('https://'+process.env.NEXT_PUBLIC_BACKEND_DOMAIN+'/api/multer', {
         method: 'POST',
         body: formData
       });
-      const data = await response.json();
-      setFiles(prev => [...prev, data]);
+      await fetchFiles(); // Refresh files after upload
     } catch (error) {
       console.error('Upload error:', error);
     }
@@ -43,9 +74,9 @@ export default function Home() {
 
   const handleGenerateRandom = async () => {
     try {
-      const response = await fetch('/api/multer');
-      const data = await response.json();
-      setUsers(prev => [...prev, data]);
+      const response = await fetch('https://'+process.env.NEXT_PUBLIC_BACKEND_DOMAIN+'/api/db/create');
+      await response.json();
+      await fetchUsers(); // Refresh users after generating
     } catch (error) {
       console.error('Generate error:', error);
     }
@@ -117,19 +148,19 @@ export default function Home() {
               <tr className="bg-gray-200">
                 <th className="p-2 border">No</th>
                 <th className="p-2 border">Filename</th>
-                <th className="p-2 border">Size</th>
-                <th className="p-2 border">Type</th>
+                <th className="p-2 border">Url</th>
                 <th className="p-2 border">Action</th>
               </tr>
             </thead>
             <tbody>
               {files.map((file, index) => (
-                <tr key={file.id}>
+                <tr key={file.name}>
                   <td className="p-2 border">{index + 1}</td>
                   <td className="p-2 border">{file.name}</td>
-                  <td className="p-2 border">{file.size}</td>
-                  <td className="p-2 border">{file.type}</td>
-                  <td className="p-2 border text-blue-600 hover:underline cursor-pointer">View</td>
+                  <td className="p-2 border">{file.url}</td>
+                  <td className="p-2 border text-blue-600 hover:underline cursor-pointer">
+                    <a href={'https://'+process.env.NEXT_PUBLIC_BACKEND_DOMAIN+file.url}>View</a>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -162,7 +193,7 @@ export default function Home() {
               {users.map((user, index) => (
                 <tr key={user.id}>
                   <td className="p-2 border">{index + 1}</td>
-                  <td className="p-2 border">{user.fullname}</td>
+                  <td className="p-2 border">{user.fullName}</td>
                   <td className="p-2 border">{user.username}</td>
                   <td className="p-2 border">{user.email}</td>
                   <td className="p-2 border">{user.password}</td>

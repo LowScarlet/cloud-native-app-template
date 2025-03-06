@@ -34,7 +34,7 @@ router.get("/", (req: Request, res: Response): void => {
         name: file,
         url: `/api/multer?key=${file}`
       }));
-      res.json({ files: fileLinks });
+      res.json(fileLinks);
     });
     return;
   }
