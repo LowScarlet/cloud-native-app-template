@@ -49,7 +49,7 @@ router.get("/", (req: Request, res: Response): void => {
   res.sendFile(filePath);
 });
 
-router.post("/upload", upload.single("file"), (req: Request, res: Response): void => {
+router.post("/", upload.single("file"), (req: Request, res: Response): void => {
   if (!req.file) {
     res.status(400).json({ message: "No file uploaded" });
     return;
