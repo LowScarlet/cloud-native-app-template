@@ -1,5 +1,6 @@
 // Import required modules
 import express, { Application, NextFunction, Request, Response } from "express";
+import cors from "cors";
 import i18n from "./utils/i18n.ts";
 import { handle } from "i18next-http-middleware";
 import { DatabaseError } from "pg-protocol";
@@ -7,6 +8,8 @@ import routes from "./app/index.ts"
 
 // Create the Express app
 const app: Application = express();
+
+app.use(cors());
 
 // i18n
 app.use(handle(i18n));
