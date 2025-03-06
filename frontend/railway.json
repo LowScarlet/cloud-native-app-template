@@ -3,7 +3,7 @@
   "build": {
     "builder": "NIXPACKS",
     "watchPatterns": [
-      "/backend/**"
+      "/frontend/**"
     ]
   },
   "deploy": {
@@ -11,7 +11,7 @@
     "numReplicas": 1,
     "sleepApplication": true,
     "multiRegionConfig": {
-      "us-west1": {
+      "asia-southeast1-eqsg3a": {
         "numReplicas": 1
       }
     },
