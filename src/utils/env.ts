@@ -1,32 +1,3 @@
-export interface EnvVariables {
-  NODE_ENV: "dev" | "production" | "test";
-  BACKEND_URL: string;
-  FRONTEND_URL: string;
-
-  JWT_SECRET: string;
-
-  DATABASE_URL: string;
-
-  AWS_ACCESS_KEY_ID: string;
-  AWS_SECRET_ACCESS_KEY: string;
-  AWS_BUCKET_NAME: string;
-  AWS_REGION: string;
-
-  ENABLE_UPLOAD: boolean;
-
-  ENABLE_AWSS3: boolean;
-  ENABLE_GCAPTCHA: boolean;
-  ENABLE_EMAIL: boolean;
-}
-
-export function getEnvVariable<T extends keyof EnvVariables>(
-  key: T,
-): EnvVariables[T] {
-  const value = process.env[key];
-
-  if (!value) {
-    throw new Error(`Missing required environment variable: ${key}`);
-  }
-
-  return value as EnvVariables[T];
-}
+export const PUBLIC_DOMAIN = process.env.RAILWAY_PUBLIC_DOMAIN || 'localhost';
+export const DATABASE_URL = process.env.DATABASE_PUBLIC_URL || '';
+export const VOLUME_PATH = process.env.RAILWAY_VOLUME_MOUNT_PATH || '/volume';
