@@ -22,7 +22,7 @@ export default function Home() {
 
   const fetchFiles = async () => {
     try {
-      const response = await fetch('https://'+process.env.NEXT_PUBLIC_BACKEND_DOMAIN+'/api/multer');
+      const response = await fetch('https://' + process.env.NEXT_PUBLIC_BACKEND_DOMAIN + '/api/multer');
       const data = await response.json();
       setFiles(data);
     } catch (error) {
@@ -32,7 +32,7 @@ export default function Home() {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch('https://'+process.env.NEXT_PUBLIC_BACKEND_DOMAIN+'/api/db');
+      const response = await fetch('https://' + process.env.NEXT_PUBLIC_BACKEND_DOMAIN + '/api/db');
       const data = await response.json();
       setUsers(data);
     } catch (error) {
@@ -47,7 +47,7 @@ export default function Home() {
 
   const handlePing = async () => {
     try {
-      const response = await fetch('https://'+process.env.NEXT_PUBLIC_BACKEND_DOMAIN+'/api/ping');
+      const response = await fetch('https://' + process.env.NEXT_PUBLIC_BACKEND_DOMAIN + '/api/ping');
       const data = await response.text();
       setPingResponse(data);
     } catch (error) {
@@ -61,8 +61,8 @@ export default function Home() {
       const file = event.target.files[0];
       const formData = new FormData();
       formData.append('file', file);
-      
-      await fetch('https://'+process.env.NEXT_PUBLIC_BACKEND_DOMAIN+'/api/multer', {
+
+      await fetch('https://' + process.env.NEXT_PUBLIC_BACKEND_DOMAIN + '/api/multer', {
         method: 'POST',
         body: formData
       });
@@ -74,7 +74,7 @@ export default function Home() {
 
   const handleGenerateRandom = async () => {
     try {
-      const response = await fetch('https://'+process.env.NEXT_PUBLIC_BACKEND_DOMAIN+'/api/db/create');
+      const response = await fetch('https://' + process.env.NEXT_PUBLIC_BACKEND_DOMAIN + '/api/db/create');
       await response.json();
       await fetchUsers(); // Refresh users after generating
     } catch (error) {
@@ -101,11 +101,16 @@ export default function Home() {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td className="p-2 border">1</td>
-                <td className="p-2 border">FRONTEND_PUBLIC_DOMAIN</td>
-                <td className="p-2 border">frontend.nt.lowscarlet.my.id</td>
-              </tr>
+              {[
+                { name: 'NEXT_PUBLIC_FRONTEND_DOMAIN', value: process.env.NEXT_PUBLIC_FRONTEND_DOMAIN },
+                { name: 'NEXT_PUBLIC_BACKEND_DOMAIN', value: process.env.NEXT_PUBLIC_BACKEND_DOMAIN }
+              ].map((env, index) => (
+                <tr key={env.name}>
+                  <td className="p-2 border">{index + 1}</td>
+                  <td className="p-2 border">{env.name}</td>
+                  <td className="p-2 border">{env.value}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -115,16 +120,16 @@ export default function Home() {
         <h1 className="text-xl -semibold">Call Backend</h1>
         <p className="mb-4 font">Will fetch api from /api/ping</p>
         <div className="space-y-4">
-          <button 
+          <button
             onClick={handlePing}
             className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-white">
             Call
           </button>
           <div>
-            <textarea 
-              cols={30} 
-              disabled 
-              className="p-2 border rounded-md w-full" 
+            <textarea
+              cols={30}
+              disabled
+              className="p-2 border rounded-md w-full"
               value={pingResponse}
             ></textarea>
           </div>
@@ -135,10 +140,10 @@ export default function Home() {
         <h1 className="font-semibold text-xl">Persistent Storage</h1>
         <p className="mb-4 font">Will fetch api from /api/db</p>
         <div className="flex sm:flex-row flex-col gap-4 mb-4">
-          <input 
-            type="file" 
+          <input
+            type="file"
             onChange={handleUpload}
-            className="p-2 border rounded-md grow" 
+            className="p-2 border rounded-md grow"
           />
           <button className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg text-white">Upload</button>
         </div>
@@ -159,7 +164,7 @@ export default function Home() {
                   <td className="p-2 border">{file.name}</td>
                   <td className="p-2 border">{file.url}</td>
                   <td className="p-2 border text-blue-600 hover:underline cursor-pointer">
-                    <a href={'https://'+process.env.NEXT_PUBLIC_BACKEND_DOMAIN+file.url}>View</a>
+                    <a href={'https://' + process.env.NEXT_PUBLIC_BACKEND_DOMAIN + file.url}>View</a>
                   </td>
                 </tr>
               ))}
@@ -172,7 +177,7 @@ export default function Home() {
         <h1 className="font-semibold text-xl">Relational Database Storage</h1>
         <p className="mb-4 font">Will fetch api from /api/multer</p>
         <div className="mb-4">
-          <button 
+          <button
             onClick={handleGenerateRandom}
             className="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg w-full sm:w-auto text-white">
             Generate Random
@@ -203,7 +208,7 @@ export default function Home() {
           </table>
         </div>
       </section>
-      
+
       <section className="p-6 text-center">
         +_+_+_+_+ LowScarlet - <a className="text-red-500" href="https://lowscarlet.my.id/">lowscarlet.my.id</a> +_+_+_+_+
       </section>
