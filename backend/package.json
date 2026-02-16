@@ -20,7 +20,7 @@
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.36.4",
     "drizzle-seed": "^0.1.2",
-    "express": "^4.21.1",
+    "express": "^4.22.1",
     "i18next": "^24.0.2",
     "i18next-fs-backend": "^2.6.0",
     "i18next-http-middleware": "^3.7.0",
